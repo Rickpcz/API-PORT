@@ -1,39 +1,40 @@
-require('dotenv').config(); // Cargar variables de entorno
-const express = require('express');
-const cors = require('cors');
-const db = require('./config/db'); // Importa la conexión a MySQLlas rutas
-
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import sequelize from './config/db.js';
+import routes from './routes/routes.js';
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Middlewares
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*' })); // Configuración de CORS
-app.use(express.json()); // Parseo de JSON
-
-// Probar conexión a la base de datos
-db.connect((err) => {
-    if (err) {
-        console.error('Error al conectar con la base de datos:', err);
-    } else {
-        console.log('Conexión exitosa a la base de datos');
-    }
-});
+app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
+app.use(express.json());
 
 // Rutas
-// app.use('/api', routes);
+app.use('/api', routes); // Todas las rutas estarán bajo el prefijo '/api'
 
-// Ruta principal
+(async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('🟢 Conexión exitosa a la base de datos MySQL');
+        await sequelize.sync({ force: false });
+        console.log('✅ Modelos sincronizados con la base de datos');
+    } catch (error) {
+        console.error('🔴 Error al conectar con la base de datos:', error);
+    }
+})();
+
+
 app.get('/', (req, res) => {
     res.send('Bienvenido a la API de Portafolio');
 });
 
-// Manejo de errores
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send({ error: 'Ocurrió un error en el servidor' });
 });
 
-// Iniciar el servidor
 app.listen(port, () => {
-    console.log(`Servidor corriendo en http://localhost:${port}`);
+    console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
 });
