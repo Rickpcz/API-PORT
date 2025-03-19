@@ -13,8 +13,8 @@ const Area = sequelize.define('Area', {
         unique: true
     }
 }, {
-    tableName: 'area',  // Nombre de la tabla en la BD
-    timestamps: false    // Evita que Sequelize agregue createdAt y updatedAt
+    tableName: 'area',
+    timestamps: false 
 });
 
 export default Area;

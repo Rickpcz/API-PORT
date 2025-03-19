@@ -11,7 +11,7 @@ app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
 app.use(express.json());
 
 // Rutas
-app.use('/api', routes); // Todas las rutas estarán bajo el prefijo '/api'
+app.use('/api', routes); 
 
 (async () => {
     try {
