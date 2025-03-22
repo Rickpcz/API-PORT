@@ -1,0 +1,12 @@
+GET http://localhost:3030/api/users
+
+### test de posts
+POST http://localhost:3030/api/portafolios/
+Content-Type: application/json
+
+{
+    "imgUser": "https://my-cara.com",
+    "skills": "muy bueno programando en javascript",
+    "achievements": "Programar un api durantee 48 horas seguidas",
+    "userId": 1
+}

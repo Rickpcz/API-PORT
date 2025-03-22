@@ -21,7 +21,7 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING(255),
         allowNull: false
     },
-    area_id: {
+    area_id:{
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
