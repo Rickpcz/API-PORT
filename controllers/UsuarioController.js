@@ -1,6 +1,7 @@
 import User from '../models/Usuario.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import sequelize from '../config/db.js';
 
 // Obtener todos los usuarios
 export const getAllUsers = async (req, res) => {
@@ -88,9 +89,33 @@ export const loginUser = async (req, res) => {
         if (!isPasswordValid) return res.status(401).json({ mensaje: "Contraseña incorrecta" });
 
         const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const iduser = user.id;
 
-        res.json({ mensaje: "Login exitoso", token });
+        res.json({ mensaje: "Login exitoso", token, id: iduser });
     } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+export const getUserWithImage = async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const [results] = await sequelize.query(
+            'CALL get_user_and_imageuser(:userId)', 
+            {
+                replacements: { userId },
+                type: sequelize.QueryTypes.RAW
+            }
+        );
+
+        if (!results || results.length === 0) {
+            return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+        }
+
+        res.json(results);
+    } catch (error) {
+        console.error('Error al ejecutar SP:', error);
         res.status(500).json({ error: error.message });
     }
 };
