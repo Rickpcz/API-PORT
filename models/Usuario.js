@@ -28,6 +28,10 @@ const User = sequelize.define('User', {
             model: 'area',
             key: 'id'
         }
+    },
+    puesto:{
+        type: DataTypes.STRING(100),
+        allowNull: true
     }
 }, {
     tableName: 'user', // Nombre de la tabla en la BD

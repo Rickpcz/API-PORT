@@ -26,7 +26,7 @@ export const getUserById = async (req, res) => {
 // Crear un usuario (registro)
 export const createUser = async (req, res) => {
     try {
-        const { nombre, username, password, area_id } = req.body;
+        const { nombre, username, password, area_id,puesto } = req.body;
 
         if (!nombre || !username || !password) {
             return res.status(400).json({ mensaje: "Todos los campos son obligatorios" });
@@ -35,7 +35,7 @@ export const createUser = async (req, res) => {
         const userExists = await User.findOne({ where: { username } });
         if (userExists) return res.status(400).json({ mensaje: "El username ya está en uso" });
 
-        const newUser = await User.create({ nombre, username, password, area_id });
+        const newUser = await User.create({ nombre, username, password, area_id, puesto });
         res.status(201).json({ mensaje: "Usuario creado correctamente", user: newUser });
     } catch (error) {
         res.status(500).json({ error: error.message });
