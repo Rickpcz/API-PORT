@@ -1,4 +1,4 @@
-import { cloud } from "../config/cloud.js";
+import { cloudinary } from "../config/cloud.js";
 import { Portafolio } from "../models/portafolio.js";
 
 
@@ -57,24 +57,33 @@ export const deletePortafolio = async (req, res) => {
     }
 };
 
-
 export const uploadImagePTF = async (request, response) => {
     if (!request.files || !request.files.image) {
-     return response.status(400).json({error: 'No se ha subido nimguna imagen'})   
+        return response.status(400).json({ error: 'No se ha subido ninguna imagen' });
+    }
+
+    const id = request.body.id;
+
+    if (!id) {
+        return response.status(400).json({ error: 'Falta el ID del portafolio' });
     }
 
     try {
-        const result = await cloud.uploader.upload(request.files.image.tempFilePath);
+        const result = await cloudinary.uploader.upload(request.files.image.tempFilePath); // <-- aquí puede fallar
         const imageUrl = result.secure_url;
-        
+
         await Portafolio.update(
-            {imgUser: imageUrl},
-            {where: {id: request.body.id}}
+            { imgUser: imageUrl },
+            { where: { id } }
         );
+
+        response.json({ success: true, imageUrl });
     } catch (error) {
-        response.status(500).json({ error: 'error al subir la imagen'})
+        console.error('Error subiendo imagen a Cloudinary:', error);
+        response.status(500).json({ error: 'error al subir la imagen' });
     }
-}
+};
+
 
 // falta integrar una funcion que al actualizar la img igual la borre el archivo del servicio
 //objetivo: optimizar recursos
