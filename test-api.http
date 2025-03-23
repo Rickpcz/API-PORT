@@ -10,3 +10,14 @@ Content-Type: application/json
     "achievements": "Programar un api durantee 48 horas seguidas",
     "userId": 1
 }
+### Test enpoint put
+PUT  http://localhost:3030/api/contactos/1
+Content-Type: application/json
+
+{
+    "id": 1,
+	"telefono": "8888899",
+    "github": "https://git.com",
+    "correo": "programer-js.com"
+}
+

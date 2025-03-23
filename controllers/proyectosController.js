@@ -38,7 +38,25 @@ export const createProyecto = async (request, response) => {
 };
 
 // Actualizar un área
+export const updateProyecto = async (request, response) => {
+    const proyecto = await Proyecto.findByPk(request.params.id);
+    if (!proyecto) {
+        return response.status(400).json({message: 'información no disponible'})
+    }
 
+    try {
+        const {id, titulo, descripcion } = request.body;
+        await Proyecto.update(
+            {   title: titulo || proyecto.title,
+                description: descripcion || proyecto.description
+            },
+            {where: {id: id}}
+        )
+    } catch (error) {
+        response.status(500).json({error: error.message})
+    }
+ 
+}
 // Eliminar un área
 export const deleteProyecto = async (request, response) => {
     try {

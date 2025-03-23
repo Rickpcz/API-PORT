@@ -40,7 +40,27 @@ export const createContacto = async (req, res) => {
 };
 
 // Actualizar un área
+export const updateContacto = async (request, response) => {
+    const contacto = await Contacto.findByPk(request.params.id);
+    if (!contacto) {
+        return response.status(400).json({message: 'información no disponible'})
+    }
 
+    try {
+        const {id, telefono, linkedin, github, correo} = request.body;
+        await Contacto.update(
+            {   telefono: telefono || contacto.telefono,
+                linkedin: linkedin || contacto.linkedin,
+                github: github || contacto.github,
+                correo: correo || contacto.correo
+            },
+            {where: {id: id}}
+        )
+    } catch (error) {
+        response.status(500).json({error: error.message})
+    }
+ 
+}
 // Eliminar un área
 export const deleteContacto = async (req, res) => {
     try {

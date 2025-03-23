@@ -1,12 +1,12 @@
 import express from 'express';
-import { createContacto, deleteContacto, getAllContactos, getContactoById } from '../controllers/contactoController.js';
+import { createContacto, deleteContacto, getAllContactos, getContactoById, updateContacto } from '../controllers/contactoController.js';
 
 
 const router = express.Router();
 
 router.get('/', getAllContactos);
 router.get('/:id', getContactoById);
-//pendiente el update
+router.put('/:id', updateContacto)
 router.post('/', createContacto);
 router.delete('/:id', deleteContacto);
 

@@ -43,7 +43,25 @@ export const createPortafolio = async (req, res) => {
 };
 
 // Actualizar un área
+export const updatePortafolio = async (request, response) => {
+    const portafolio = await Portafolio.findByPk(request.params.id);
+    if (!portafolio) {
+        return response.status(400).json({message: 'información no disponible'})
+    }
 
+    try {
+        const {id, habilidades, logros } = request.body;
+        await Portafolio.update(
+            {   skills: habilidades || portafolio.skills,
+                archievements: logros || portafolio.archievements
+            },
+            {where: {id: id}}
+        )
+    } catch (error) {
+        response.status(500).json({error: error.message})
+    }
+ 
+}
 // Eliminar un área
 export const deletePortafolio = async (req, res) => {
     try {
