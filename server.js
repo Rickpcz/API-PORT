@@ -3,12 +3,14 @@ import express from 'express';
 import cors from 'cors';
 import sequelize from './config/db.js';
 import routes from './routes/routes.js';
+import fileUpload from 'express-fileupload';
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
 app.use(express.json());
+app.use(fileUpload({useTempFiles: true}))
 
 // Rutas
 app.use('/api', routes); 
