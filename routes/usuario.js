@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', getAllUsers);
 router.get('/:id', getUserById);
-router.get('/:username', getUserByUsername);
+router.get('/username/:username', getUserByUsername);
 router.get('/with-image/:id', getUserWithImage);
 router.post('/', createUser);
 router.put('/:id', updateUser);
