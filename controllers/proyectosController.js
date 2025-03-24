@@ -1,4 +1,5 @@
 import { Proyecto } from "../models/proyecto.js";
+import { cloudinary } from "../config/cloud.js";
 
 export const getAllProyectos = async (request, response) =>{
     try {
