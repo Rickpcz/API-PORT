@@ -26,11 +26,11 @@ export const createExperiencia = async (request, response) => {
             description, 
             period, 
             company_name, 
-            portafolio_id
+            portafolioId
         } = request.body;
         // if (!nombre) return response.status(400).json({ mensaje: "El nombre es obligatorio" });
 
-        const nuevaExp = await Experiencia.create({ description, period, company_name,portafolio_id});
+        const nuevaExp = await Experiencia.create({ description, period, company_name,portafolioId});
         response.status(201).json(nuevaExp);
     } catch (error) {
         response.status(500).json({ error: error.message });
@@ -46,13 +46,15 @@ export const updateExperiencia = async (request, response) => {
 
     try {
         const {id, descripcion, periodo, empresa } = request.body;
-        await Experiencia.update(
+        const updatedExperiencia = await Experiencia.update(
             {   description: descripcion || xp.description,
                 period: periodo || xp.period,
                 company_name: empresa || xp.company_name  
             },
             {where: {id: id}}
         )
+
+        response.json(updatedExperiencia);
     } catch (error) {
         response.status(500).json({error: error.message})
     }

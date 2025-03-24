@@ -119,3 +119,84 @@ export const getUserWithImage = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+// Obtener un usuario por ID
+export const getUserById = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id); // Busca el usuario por su ID (clave primaria)
+        if (!user) {
+            return res.status(404).json({ mensaje: "Usuario no encontrado" });
+        }
+        res.json(user); // Devuelve el usuario encontrado
+    } catch (error) {
+        res.status(500).json({ error: error.message }); // Manejo de errores
+    }
+};
+
+export const getAllUserData = async (req, res) => {
+    const usuarioId = req.params.id;
+
+    try {
+        // 1. Usuario y Portafolio
+        const [usuario] = await sequelize.query(`
+            SELECT u.id AS userId, u.nombre, u.username, u.puesto,
+                   p.id AS portafolioId, p.imgUser, p.skills, p.archievements
+            FROM user u
+            LEFT JOIN portafolio p ON p.userId = u.id
+            WHERE u.id = :usuarioId
+        `, { replacements: { usuarioId }, type: sequelize.QueryTypes.SELECT });
+
+        // 2. Proyectos
+        const proyectos = await sequelize.query(`
+            SELECT pr.id, pr.title, pr.description, pr.imgproject
+            FROM proyecto pr
+            INNER JOIN portafolio p ON pr.portafolioId = p.id
+            WHERE p.userId = :usuarioId
+        `, { replacements: { usuarioId }, type: sequelize.QueryTypes.SELECT });
+
+        // 3. Experiencias
+        const experiencias = await sequelize.query(`
+            SELECT xp.id, xp.description, xp.period, xp.company_name
+            FROM xp
+            INNER JOIN portafolio p ON xp.portafolioId = p.id
+            WHERE p.userId = :usuarioId
+        `, { replacements: { usuarioId }, type: sequelize.QueryTypes.SELECT });
+
+        // 4. Habilidades suaves
+        const habilidades = await sequelize.query(`
+            SELECT hb.id, hb.habilidad
+            FROM habilidades_blandas hb
+            INNER JOIN portafolio p ON hb.portafolioId = p.id
+            WHERE p.userId = :usuarioId
+        `, { replacements: { usuarioId }, type: sequelize.QueryTypes.SELECT });
+
+        // 5. Herramientas
+        const herramientas = await sequelize.query(`
+            SELECT ht.id, ht.herramienta
+            FROM herramientas ht
+            INNER JOIN portafolio p ON ht.portafolioId = p.id
+            WHERE p.userId = :usuarioId
+        `, { replacements: { usuarioId }, type: sequelize.QueryTypes.SELECT });
+
+        // 6. Contacto
+        const [contacto] = await sequelize.query(`
+            SELECT c.id, c.telefono, c.linkedin, c.github, c.correo, c.descripcion, c.twitter
+            FROM contacto c
+            WHERE c.user_id = :usuarioId
+        `, { replacements: { usuarioId }, type: sequelize.QueryTypes.SELECT });
+
+        res.json({
+            usuario: usuario || {},
+            proyectos,
+            experiencias,
+            habilidades,
+            herramientas,
+            contacto: contacto || {}
+        });
+
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+

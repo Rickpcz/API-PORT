@@ -27,12 +27,14 @@ export const createContacto = async (req, res) => {
             telefono, 
             linkedin, 
             github, 
-            correo 
+            correo,
+            descripcion,
+            twitter
 
         } = req.body;
         // if (!nombre) return res.status(400).json({ mensaje: "El nombre es obligatorio" });
 
-        const nuevoContacto = await Contacto.create({ user_id, telefono, linkedin,github, correo });
+        const nuevoContacto = await Contacto.create({ user_id, telefono, linkedin,github, correo, descripcion, twitter });
         res.status(201).json(nuevoContacto);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -47,15 +49,19 @@ export const updateContacto = async (request, response) => {
     }
 
     try {
-        const {id, telefono, linkedin, github, correo} = request.body;
-        await Contacto.update(
+        const {id, telefono, linkedin, github, correo, descripcion, twitter } = request.body;
+        const updatedContacto = await Contacto.update(
             {   telefono: telefono || contacto.telefono,
                 linkedin: linkedin || contacto.linkedin,
                 github: github || contacto.github,
-                correo: correo || contacto.correo
+                correo: correo || contacto.correo,
+                descripcion: descripcion || contacto.descripcion,
+                twitter: twitter || contacto.twitter
             },
-            {where: {id: id}}
+            {where: {id: request.params.id}}
         )
+
+        response.json(updatedContacto);
     } catch (error) {
         response.status(500).json({error: error.message})
     }

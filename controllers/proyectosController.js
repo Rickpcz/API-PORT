@@ -25,12 +25,12 @@ export const createProyecto = async (request, response) => {
         const { 
             title, 
             description, 
-            portafolio_id, 
-
+            portafolioId, 
+            imgproject
         } = request.body;
         // if (!nombre) return response.status(400).json({ mensaje: "El nombre es obligatorio" });
 
-        const nuevoProyecto = await Proyecto.create({ title, description, portafolio_id});
+        const nuevoProyecto = await Proyecto.create({ title, description, portafolioId,imgproject});
         response.status(201).json(nuevoProyecto);
     } catch (error) {
         response.status(500).json({ error: error.message });
@@ -45,13 +45,15 @@ export const updateProyecto = async (request, response) => {
     }
 
     try {
-        const {id, titulo, descripcion } = request.body;
-        await Proyecto.update(
+        const {id, titulo, descripcion,imgproject } = request.body;
+        const updatedProyecto = await Proyecto.update(
             {   title: titulo || proyecto.title,
-                description: descripcion || proyecto.description
+                description: descripcion || proyecto.description,
+                imgproject: imgproject || proyecto.imgproject
             },
             {where: {id: id}}
         )
+        response.json(updatedProyecto);
     } catch (error) {
         response.status(500).json({error: error.message})
     }
@@ -67,5 +69,33 @@ export const deleteProyecto = async (request, response) => {
         response.json({ mensaje: "Área eliminada correctamente" });
     } catch (error) {
         response.status(500).json({ error: error.message });
+    }
+};
+
+
+export const uploadImagePTF = async (request, response) => {
+    if (!request.files || !request.files.image) {
+        return response.status(400).json({ error: 'No se ha subido ninguna imagen' });
+    }
+
+    const id = request.body.id;
+
+    if (!id) {
+        return response.status(400).json({ error: 'Falta el ID del portafolio' });
+    }
+
+    try {
+        const result = await cloudinary.uploader.upload(request.files.image.tempFilePath);
+        const imageUrl = result.secure_url;
+
+        await Proyecto.update(
+            { imgproject: imageUrl },
+            { where: { id } }
+        );
+
+        response.json({ success: true, imageUrl });
+    } catch (error) {
+        console.error('Error subiendo imagen a Cloudinary:', error);
+        response.status(500).json({ error: 'error al subir la imagen' });
     }
 };

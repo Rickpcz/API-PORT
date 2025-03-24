@@ -23,11 +23,19 @@ export const Contacto =  sequelize.define('Contacto',{
         type: DataTypes.STRING(255)
     },
     github: {
-        type: DataTypes.STRING(255)
+        type: DataTypes.STRING(255),
+        allowNull: true
     },
     correo: {
         type: DataTypes.STRING(255)
-    }
+    },
+    descripcion: {
+        type: DataTypes.TEXT()
+    },
+    twitter: {
+        type: DataTypes.STRING(255),
+        allowNull: true
+    },
 
     
 },{

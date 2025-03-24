@@ -1,21 +1,14 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
-export const Proyecto =  sequelize.define('Proyecto',{
+export const Herramienta =  sequelize.define('Herramienta',{
     id:{
         type: DataTypes.INTEGER, 
         autoIncrement: true,
         primaryKey: true
     },
-    title:{
+    herramienta:{
         type:  DataTypes.STRING(100),
-        allowNull: true
-    },
-    description: {
-        type: DataTypes.TEXT()
-    },
-    imgproject: {
-        type: DataTypes.STRING(255),
         allowNull: true
     },
     portafolioId: {
@@ -27,7 +20,6 @@ export const Proyecto =  sequelize.define('Proyecto',{
         }
     }
 },{
-    tableName: 'proyecto', // Nombre de la tabla en la BD
+    tableName: 'herramientas', // Nombre de la tabla en la BD
     timestamps: false
 });
-
