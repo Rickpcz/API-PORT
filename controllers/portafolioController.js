@@ -2,6 +2,7 @@ import { cloudinary } from "../config/cloud.js";
 import { Portafolio } from "../models/portafolio.js";
 
 
+
 // get no necesario
 export const getAllPortafolios = async (request, response) =>{
     try {
@@ -14,9 +15,11 @@ export const getAllPortafolios = async (request, response) =>{
 
 export const getPortafoliosById = async (request, response) => {
     try {
+        
         const portafolio = await Portafolio.findByPk(request.params.id);
+        console.log(portafolio.dataValues);
         if (!portafolio) return response.status(404).json({ mensaje: "Portafolio no encontrada -- img" });
-        res.json(portafolio);
+        response.json(portafolio.dataValues);
     } catch (error) {
         response.status(500).json({ error: error.message });
     }

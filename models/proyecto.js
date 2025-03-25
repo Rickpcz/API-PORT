@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
+import sequelize from "../config/db.js"
+
 
 export const Proyecto =  sequelize.define('Proyecto',{
     id:{
@@ -30,4 +31,3 @@ export const Proyecto =  sequelize.define('Proyecto',{
     tableName: 'proyecto', // Nombre de la tabla en la BD
     timestamps: false
 });
-

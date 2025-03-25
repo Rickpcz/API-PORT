@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
+
 export const Portafolio =  sequelize.define('Portafolio',{
     id:{
         type: DataTypes.INTEGER, 

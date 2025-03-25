@@ -1,13 +1,25 @@
-GET http://localhost:3030/api/users
+GET http://localhost:3030/api/portafolios/1
 
-### test de posts
+
+### test de posts proyectos
+POST http://localhost:3030/api/proyectos/
+Content-Type: application/json
+
+{
+    "title": "proyecto de prueba",
+    "description": "api rest test",
+    "portafolioId": 1,
+    "imgproject": "https://my-cara.com"
+}
+
+### Envio de portafolio
 POST http://localhost:3030/api/portafolios/
 Content-Type: application/json
 
 {
     "imgUser": "https://my-cara.com",
-    "skills": "muy bueno programando en javascript",
-    "achievements": "Programar un api durantee 48 horas seguidas",
+    "skills": "muy bueno en js",
+    "achievements": "api en express",
     "userId": 1
 }
 ### Test enpoint put
