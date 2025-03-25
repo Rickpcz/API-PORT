@@ -1,10 +1,12 @@
 import brevo from '@getbrevo/brevo';
-
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const sendEmailToUser = async (request, response) =>{
 
-    const {nombre, email, asunto, mensage, emailUser, userName } = request.body;
     try {
+        const {nombre, email, asunto, mensaje, userName, emailUser } = request.body;
+        console.log(request.body)
         const apiInstance =  new brevo.TransactionalEmailsApi();
     
         apiInstance.setApiKey(
@@ -22,7 +24,7 @@ export const sendEmailToUser = async (request, response) =>{
         sendSmtpEmail.htmlContent = `
             <html>
                 <body>
-                <p>${mensage}</p>
+                <p>${mensaje}</p>
                 </body>
             </html>`;
         
