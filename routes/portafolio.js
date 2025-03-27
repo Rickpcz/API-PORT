@@ -1,6 +1,6 @@
 import express from 'express';
 import { createPortafolio, deletePortafolio, getAllPortafolios, getPortafoliosById, updatePortafolio, uploadImagePTF,getPortafolioByUserId } from '../controllers/portafolioController.js';
-import { sendEmailToUser } from '../controllers/correoController.js';
+import { sendEmailToUser, sendMailToUser } from '../controllers/correoController.js';
 
 
 const router = express.Router();
@@ -11,6 +11,7 @@ router.put('/update', updatePortafolio)
 router.post('/', createPortafolio);
 router.post('/upload', uploadImagePTF);
 router.post('/email', sendEmailToUser);
+//router.post('/email', sendMailToUser);
 router.delete('/:id', deletePortafolio);
 router.get('/usuario/:userId', getPortafolioByUserId);
 

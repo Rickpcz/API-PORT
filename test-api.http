@@ -12,6 +12,19 @@ Content-Type: application/json
     "imgproject": "https://my-cara.com"
 }
 
+### Test post correo alternativa
+POST http://localhost:3030/api/portafolios/email
+Content-Type: application/json
+
+{
+    "nombre": "Remitente",
+    "email": "fueleme@gmail.com",
+    "asunto": "Probar el controlador",
+    "mensaje": "Mensaje de prueba",
+    "emailUser": "fueleme@gmail.com"
+    
+
+}
 ### Test post correo
 POST http://localhost:3030/api/portafolios/email
 Content-Type: application/json
