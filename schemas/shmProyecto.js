@@ -7,9 +7,10 @@ const proyectoSchema = zd.object({
     description: zd.string({
         invalid_type_error: 'Formato inválido'
     }),
-    portafolioId: zd.number().int()
-
-    
+    portafolioId: zd.number().int(),
+    imgproject: zd.string({
+        invalid_type_error: 'Formato inválido'
+    })  
 })
 
 export const validatePartialProyecto = (objeto) =>{
