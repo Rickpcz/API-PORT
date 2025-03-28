@@ -1,6 +1,6 @@
 import express from 'express';
 import { createPortafolio, deletePortafolio, getAllPortafolios, getPortafoliosById, updatePortafolio, uploadImagePTF,getPortafolioByUserId } from '../controllers/portafolioController.js';
-import { sendEmailToUser, sendMailToUser } from '../controllers/correoController.js';
+import { sendEmailToUser} from '../controllers/correoController.js';
 
 
 const router = express.Router();

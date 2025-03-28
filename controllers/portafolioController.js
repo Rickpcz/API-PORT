@@ -1,5 +1,6 @@
 import { cloudinary } from "../config/cloud.js";
 import { Portafolio } from "../models/portafolio.js";
+import { validatePartialPortafolio } from "../schemas/shmPortafolio.js";
 
 
 
@@ -27,21 +28,21 @@ export const getPortafoliosById = async (request, response) => {
 
 // Crear una nueva área
 export const createPortafolio = async (req, res) => {
+    const result = await validatePartialPortafolio(req.body);
+    if(result.error) return res.status(400).json({message: JSON.parse(result.error.message)})
     try {
-        const { 
+        /* const { 
             imgUser, 
             skills, 
             archievements, 
             userId, 
+        } = req.body; */
+        const nuevoPortafolio = {...result.data}
 
-
-        } = req.body;
-        // if (!nombre) return res.status(400).json({ mensaje: "El nombre es obligatorio" });
-
-        const nuevoPortafolio = await Portafolio.create({ imgUser, skills, archievements, userId });
-        res.status(201).json(nuevoPortafolio);
+        const portafolio = await Portafolio.create(nuevoPortafolio);
+        res.status(201).json(portafolio);
     } catch (error) {
-        res.status(500).json({ error: error.message,portafolio:'hola' });
+        res.status(500).json({ error: error.message });
     }
 };
 
@@ -90,7 +91,7 @@ export const uploadImagePTF = async (request, response) => {
     if (!id) {
         return response.status(400).json({ error: 'Falta el ID del portafolio' });
     }
-
+    
     try {
         const result = await cloudinary.uploader.upload(request.files.image.tempFilePath); // <-- aquí puede fallar
         const imageUrl = result.secure_url;

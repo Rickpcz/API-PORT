@@ -1,4 +1,5 @@
 import {Habilidad} from '../models/Habilidad.js';
+import { validateHabilidad } from '../schemas/shmHabilidad.js';
 
 export const getAllHabilidades = async (req, res) => {
     try {
@@ -21,15 +22,16 @@ export const getHabilidadesById = async (req, res) => {
 
 // Crear una nueva área
 export const createHabilidad = async (req, res) => {
+    const result = await validateHabilidad(req.body);
+    if(result.error) return result.status(400).json({message: JSON.parse(result.error.message)})
     try {
-        const { 
+/*         const { 
             habilidad, 
-             portafolioId
-        } = req.body;
-        // if (!nombre) return res.status(400).json({ mensaje: "El nombre es obligatorio" });
-
-        const nuevoHabilidad = await Habilidad.create({ habilidad,  portafolioId });
-        res.status(201).json(nuevoHabilidad);
+            portafolioId
+        } = req.body; */
+        const nuevaHabilidad = {...result.data}
+        const habilidad = await Habilidad.create(nuevaHabilidad);
+        res.status(201).json(habilidad);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

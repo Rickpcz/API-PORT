@@ -2,28 +2,27 @@ GET http://localhost:3030/api/portafolios/1
 
 
 ### test de posts proyectos
-POST http://localhost:3030/api/proyectos/
+POST http://localhost:3030/api/users/
 Content-Type: application/json
 
 {
-    "title": "proyecto de prueba",
-    "description": "api rest test",
-    "portafolioId": 1,
-    "imgproject": "https://my-cara.com"
+    "nombre": "Angel",
+    "username": "angel    master pro lol",
+    "password": "angelpro",
+    "area_id": 1,
+    "puesto": "ponso123@gmail.com"
 }
 
 ### Test post correo alternativa
-POST http://localhost:3030/api/portafolios/email
+POST http://localhost:3030/api/experiencias/
 Content-Type: application/json
 
 {
-    "nombre": "Remitente",
-    "email": "fueleme@gmail.com",
-    "asunto": "Probar el controlador",
-    "mensaje": "Mensaje de prueba",
-    "emailUser": "fueleme@gmail.com"
+    "description": "Demasiado good",
+    "period": "2020-2050",
+    "company_name": "Ponso Inc.",
+    "portafolioId": 2
     
-
 }
 ### Test post correo
 POST http://localhost:3030/api/portafolios/email
@@ -34,21 +33,20 @@ Content-Type: application/json
     "email": "fueleme@gmail.com",
     "asunto": "Probar el controlador",
     "mensaje": "Mensaje de prueba",
-    "userName":"Festy",
-    "emailUser": "fueleme@gmail.com"
+    "userName":"Destinatario",
+    "emailUser": "abancristian2@gmail.com"
     
 
 }
 
-### Envio de portafolio
-POST http://localhost:3030/api/portafolios/
+### Test enpoint POST Global
+POST http://localhost:3030/api/contactos/
 Content-Type: application/json
 
 {
-    "imgUser": "https://my-cara.com",
-    "skills": "muy bueno en js",
-    "achievements": "api en express",
-    "userId": 1
+    "herramienta": "PostMan",
+    "portafolioId": 4
+    
 }
 ### Test enpoint put
 PUT  http://localhost:3030/api/contactos/1

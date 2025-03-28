@@ -2,6 +2,7 @@ import User from '../models/Usuario.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import sequelize from '../config/db.js';
+import { validateUsuario } from '../schemas/shmUsuario.js';
 
 // Obtener todos los usuarios
 export const getAllUsers = async (req, res) => {
@@ -26,17 +27,21 @@ export const getUserByUsername = async (req, res) => {
 
 // Crear un usuario (registro)
 export const createUser = async (req, res) => {
+    const results = await validateUsuario(req.body);
+    if(results.error) return res.status(400).json({message: JSON.parse(results.error.message)})
+
     try {
-        const { nombre, username, password, area_id,puesto } = req.body;
+        const nuevoUsuario = {...results.data}
+/*         const { nombre, username, password, area_id,puesto } = req.body;
 
         if (!nombre || !username || !password) {
             return res.status(400).json({ mensaje: "Todos los campos son obligatorios" });
-        }
+        } */
 
-        const userExists = await User.findOne({ where: { username } });
+        const userExists = await User.findOne({ where: {username : nuevoUsuario.username.trim()} });
         if (userExists) return res.status(400).json({ mensaje: "El username ya está en uso" });
 
-        const newUser = await User.create({ nombre, username, password, area_id, puesto });
+        const newUser = await User.create(nuevoUsuario);
         res.status(201).json({ mensaje: "Usuario creado correctamente", user: newUser });
     } catch (error) {
         res.status(500).json({ error: error.message });

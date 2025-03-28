@@ -1,4 +1,5 @@
 import Area from '../models/Area.js';
+import { validateArea } from '../schemas/shmArea.js';
 
 // Obtener todas las áreas
 export const getAllAreas = async (req, res) => {
@@ -24,10 +25,11 @@ export const getAreaById = async (req, res) => {
 // Crear una nueva área
 export const createArea = async (req, res) => {
     try {
-        const { nombre } = req.body;
-        if (!nombre) return res.status(400).json({ mensaje: "El nombre es obligatorio" });
-
-        const nuevaArea = await Area.create({ nombre });
+        const result = await validateArea(req.body);
+        if (result.error) return res.status(400).json({ mensaje: result.error.message });
+        const newArea = { ...result.data}
+       
+        const nuevaArea = await Area.create(newArea);
         res.status(201).json(nuevaArea);
     } catch (error) {
         res.status(500).json({ error: error.message });

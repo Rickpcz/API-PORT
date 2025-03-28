@@ -1,4 +1,5 @@
 import { Contacto } from "../models/contacto.js";
+import { validateContacto } from "../schemas/shmContacto.js";
 
 export const getAllContactos = async (request, response) =>{
     try {
@@ -21,6 +22,10 @@ export const getContactoById = async (request, response) => {
 
 // Crear una nueva área
 export const createContacto = async (req, res) => {
+    const result = await validateContacto(req.body)
+    if (result.error) {
+       return res.status(400).json({message: JSON.parse(result.error.message)});
+    }
     try {
         const { 
             user_id, 
@@ -32,8 +37,7 @@ export const createContacto = async (req, res) => {
             twitter
 
         } = req.body;
-        // if (!nombre) return res.status(400).json({ mensaje: "El nombre es obligatorio" });
-
+       
         const nuevoContacto = await Contacto.create({ user_id, telefono, linkedin,github, correo, descripcion, twitter });
         res.status(201).json(nuevoContacto);
     } catch (error) {

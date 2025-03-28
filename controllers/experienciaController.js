@@ -1,4 +1,6 @@
+import { json } from "sequelize";
 import { Experiencia } from "../models/experiencia.js";
+import { validateExperiencia } from "../schemas/shmExperiencia.js";
 
 export const getAllExperiencias = async (request, response) =>{
     try {
@@ -21,16 +23,20 @@ export const getExperienciaById = async (request, response) => {
 
 // Crear una nueva área
 export const createExperiencia = async (request, response) => {
+     const result = await validateExperiencia(request.body)
+     if (result.error) {
+        return response.status(400).json({message: JSON.parse(result.error.message)})
+     }
     try {
-        const { 
+        /* const { 
             description, 
             period, 
             company_name, 
             portafolioId
-        } = request.body;
-        // if (!nombre) return response.status(400).json({ mensaje: "El nombre es obligatorio" });
-
-        const nuevaExp = await Experiencia.create({ description, period, company_name,portafolioId});
+        } = request.body; */
+        const nuevaExperiencia = {...result.data}
+        
+        const nuevaExp = await Experiencia.create(nuevaExperiencia);
         response.status(201).json(nuevaExp);
     } catch (error) {
         response.status(500).json({ error: error.message });

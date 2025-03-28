@@ -1,4 +1,5 @@
 import {Herramienta} from '../models/Herramienta.js';
+import { validateHerramienta } from '../schemas/shmHerramienta.js';
 
 export const getAllTools = async (req, res) => {
     try {
@@ -21,14 +22,16 @@ export const getToolsById = async (req, res) => {
 
 // Crear una nueva área
 export const createTool = async (req, res) => {
+    const result = await validateHerramienta(req.body);
+    if(result.error) return res.status(400).json({message: JSON.parse(result.error.message)})
     try {
-        const { 
+       /*  const { 
             herramienta, 
             portafolioId
         } = req.body;
-        // if (!nombre) return res.status(400).json({ mensaje: "El nombre es obligatorio" });
-
-        const nuevoTool = await Herramienta.create({ herramienta, portafolioId });
+         */
+        const nuevaHerramienta = {...result.data};
+        const nuevoTool = await Herramienta.create(nuevaHerramienta);
         res.status(201).json(nuevoTool);
     } catch (error) {
         res.status(500).json({ error: error.message });

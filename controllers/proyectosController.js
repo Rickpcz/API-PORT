@@ -1,5 +1,6 @@
 import { Proyecto } from "../models/proyecto.js";
 import { cloudinary } from "../config/cloud.js";
+import { validatePartialProyecto } from "../schemas/shmProyecto.js";
 
 export const getAllProyectos = async (request, response) =>{
     try {
@@ -22,17 +23,18 @@ export const getProyectosById = async (request, response) => {
 
 // Crear una nueva área
 export const createProyecto = async (request, response) => {
+    const result = await validatePartialProyecto(request.body);
+    if(result.error) return response.status(400).json({message: JSON.parse(result.error.message)})
     try {
-        const { 
+        /* const { 
             title, 
             description, 
             portafolioId, 
             imgproject
-        } = request.body;
-        // if (!nombre) return response.status(400).json({ mensaje: "El nombre es obligatorio" });
-
-        const nuevoProyecto = await Proyecto.create({ title, description, portafolioId,imgproject});
-        response.status(201).json(nuevoProyecto);
+        } = request.body; */
+        const nuevoProyecto = {...result.data}
+        const proyecto = await Proyecto.create(nuevoProyecto);
+        response.status(201).json(proyecto);
     } catch (error) {
         response.status(500).json({ error: error.message });
     }
